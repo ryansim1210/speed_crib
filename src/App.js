@@ -3,15 +3,25 @@ import './App.css';
 import { ReactComponent as SvgCards } from './svg-cards.svg';
 
 import Draggable from 'react-draggable'; // Import the Draggable component
+import { useState } from 'react';
+import Deck from './cards/deck'
 
 
 
 function App() {
 
   const handleCardClick = () => {
-    alert('Card clicked!');
+    // alert('Card clicked!');
+    if (numCards == 0){
+      alert('Out of cards!');
+    }
+    else{
+      setNumCards(numCards-1)
+    }
   };
   
+
+  const [numCards, setNumCards] = useState(52)
 
   return (
     <div className="App">
@@ -24,10 +34,11 @@ function App() {
               height: '150px',
               cursor: 'pointer'
             }}> {/* Just for debugging */}
-            <svg width="100" height="150" viewBox="0 0 170 230">
+            <Deck cardsLeft={numCards}/>
+            {/* <svg width="100" height="150" viewBox="0 0 170 230">
               <SvgCards />
-              <use xlinkHref="#spade_1" />
-            </svg>
+              <use xlinkHref={card} />
+            </svg> */}
           </div>
         </Draggable>
         <p>
