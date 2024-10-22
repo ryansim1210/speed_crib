@@ -94,8 +94,8 @@
 .card-slot {
   width: 80px;  /* Width of each card slot */
   height: 120px; /* Height of each card slot */
-  border: 2px solid #333; /* Border for the slot */
+  /* border: 2px solid #333; Border for the slot */
   border-radius: 8px;
   margin: 0 10px; /* Space between the slots */
-  background-color: #e0e0e0; /* Light grey background for empty slots */
+  background-color: transparent; /* Light grey background for empty slots */
 }
