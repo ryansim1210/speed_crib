@@ -10,7 +10,7 @@ import Deck from './cards/deck'
 
 function App() {
 
-  const handleCardClick = () => {
+  const handlePlayClick = () => {
     // alert('Card clicked!');
     if (numCards == 0){
       alert('Out of cards!');
@@ -27,31 +27,29 @@ function App() {
     <div className="App">
       <header className="App-header">
         {/* <img src={logo} alt="ace-of-spades" /> */}
-        <Draggable>
-          <div onClick={handleCardClick}
-            style={{
-              width: '100px',
-              height: '150px',
-              cursor: 'pointer'
-            }}> {/* Just for debugging */}
-            <Deck cardsLeft={numCards}/>
-            {/* <svg width="100" height="150" viewBox="0 0 170 230">
-              <SvgCards />
-              <use xlinkHref={card} />
-            </svg> */}
+
+        <button className="play-button" onClick={handlePlayClick}>
+          Play
+        </button>
+
+        <div className="card-slots-container">
+          <div className="hand">
+            {/* First hand of 6 slots */}
+            {Array.from({ length: 6 }, (_, index) => (
+              <div key={index} className="card-slot"></div>
+            ))}
           </div>
-        </Draggable>
-        <p>
-          Speed Crib
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a> 
+          <div className="hand">
+            {/* Second hand of 6 slots */}
+            {Array.from({ length: 6 }, (_, index) => (
+              <div key={index} className="card-slot"></div>
+            ))}
+          </div>
+        </div>
+
+        <div className="deck-wrapper">
+          <Deck cardsLeft={numCards} />
+        </div>
       </header>
     </div>
   );

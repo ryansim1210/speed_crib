@@ -36,3 +36,66 @@
     transform: rotate(360deg);
   }
 }
+
+.App {
+  text-align: center;
+  position: relative;
+  min-height: 100vh; /* Ensure the container takes the full viewport height */
+}
+
+.App-header {
+  padding: 20px;
+}
+
+.deck-wrapper {
+  position: fixed; /* Fix the position to the viewport */
+  bottom: 50px;       /* Align to the bottom of the viewport */
+  right: 300px;        /* Align to the right of the viewport */
+  margin: 50px;    /* Optional: Add some margin to avoid edges */
+}
+
+
+/* Play button styling */
+.play-button {
+  background-color: #4CAF50; /* Green background */
+  border: none; /* Remove border */
+  color: white; /* White text */
+  padding: 15px 32px; /* Add padding */
+  text-align: center;
+  font-size: 16px; /* Adjust font size */
+  margin: 20px; /* Margin around the button */
+  cursor: pointer; /* Pointer cursor on hover */
+  border-radius: 8px; /* Rounded corners */
+}
+
+/* Add a hover effect */
+.play-button:hover {
+  background-color: #45a049;
+}
+
+
+/* Center card slots */
+.card-slots-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 50vh; /* Adjust height to ensure it's centered on the screen */
+}
+
+/* Each hand (row of 6 card slots) */
+.hand {
+  display: flex;
+  justify-content: center;
+  margin: 10px 0;
+}
+
+/* Each card slot */
+.card-slot {
+  width: 80px;  /* Width of each card slot */
+  height: 120px; /* Height of each card slot */
+  border: 2px solid #333; /* Border for the slot */
+  border-radius: 8px;
+  margin: 0 10px; /* Space between the slots */
+  background-color: #e0e0e0; /* Light grey background for empty slots */
+}
