@@ -99,3 +99,41 @@
   margin: 0 10px; /* Space between the slots */
   background-color: transparent; /* Light grey background for empty slots */
 }
+
+.card-slot:hover {
+  transform: scale(1.1); /* Optional: scale up on hover for visual feedback */
+}
+
+.score-button {
+  margin-right: 10px; /* Adjust spacing as needed */
+  margin-top: 30px;
+  cursor: pointer;
+  padding: 5px 10px; /* Smaller padding for a smaller button */
+  font-size: 18px; /* Smaller font size */
+  border: 1px solid #ccc; /* Optional: Add a border */
+  border-radius: 4px; /* Optional: Add some rounding to the corners */
+  background-color: #f0f0f0; /* Background color */
+  transition: background-color 0.1s; /* Smooth transition on hover */
+  width: 200px; /* Set a fixed width */
+  height: 75px; /* Set a fixed height */
+}
+
+.score-button:hover {
+  background-color: #e0e0e0; /* Change background on hover */
+}
+
+.played-cards {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px; /* Space between played cards and hands */
+  position: relative; /* Enable positioning for child elements */
+}
+
+.played-card {
+  margin: 0 -30px; /* Negative margin to create overlap */
+  transition: transform 0.3s; /* Optional: add a transition for smooth hover effect */
+}
+
+.played-card:hover {
+  transform: scale(1.1); /* Optional: scale up on hover for visual feedback */
+}

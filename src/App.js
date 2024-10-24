@@ -16,6 +16,8 @@ function App() {
 
   const [handsDealt, setHandsDealt] = useState({})
 
+  const [isButtonVisible, setIsButtonVisible] = useState(true); // State to manage button visibility
+
     // Shuffle cards and set them only once when the component mounts
     useEffect(() => {
         const shuffledCards = shuffleCards(allCards);
@@ -29,6 +31,7 @@ function App() {
         }
         setHandsDealt(dealHands(cards)); // Deal hands from the shuffled cards
         setNumCards(prevNum => prevNum - 12); // Decrease number of cards by 12
+        setIsButtonVisible(false);
     };
 
   return (
@@ -36,10 +39,12 @@ function App() {
       <header className="App-header">
         {/* <img src={logo} alt="ace-of-spades" /> */}
 
-        <button className="play-button" onClick={handlePlayClick}>
-          Play
-        </button>
-        <Hands hands={handsDealt}/>
+        {isButtonVisible && ( // Conditionally render the button
+          <button className="play-button" onClick={handlePlayClick}>
+              Play
+          </button>
+        )}
+        <Hands hands={handsDealt} setHands={setHandsDealt}/>
 
         <div className="deck-wrapper">
           <Deck cardsLeft={numCards} />

@@ -1,14 +1,5 @@
 import { ReactComponent as SvgCards } from '../svg-cards.svg';
-
-
-const rendercard = (card) => {
-    return (
-        <svg width="100" height="150" viewBox="0 0 170 230">
-              <SvgCards />
-              <use xlinkHref={card} />
-            </svg>
-    )
-}
+import { useEffect, useState } from 'react';
 
 export const dealHands = (array) => {
     const hands = {}
@@ -89,25 +80,75 @@ export const allCards = [
     '#club_king'   // King of Clubs
 ];
 
+export function Hands ( {hands, setHands} ) {
 
-export function Hands ( {hands} ) {
+    const [scoringhand, setScoringHand] = useState(null)
+    const [scoreHandButtonVisible, setScoreHandButtonVisible] = useState(true)
+    const [playedCards, setPlayedCards] = useState([]); // State for storing the index of the played card
+
+    const handleCardClick = (index) => {
+        setPlayedCards((prev) => [...prev, hands[index]]); // Store the played card
+        setHands((prevHands) => ({
+          ...prevHands,
+          [index]: null, // Set the played card to null
+        }));
+        console.log(`Card at index ${index} was played`);
+    };
+    
+
+    const renderCard = (card, index) => {
+        return (
+            <div onClick={() => handleCardClick(index)} style={{ cursor: 'pointer' }}>
+                <svg width="100" height="150" viewBox="0 0 170 230">
+                    <use xlinkHref={card} />
+                </svg>
+            </div>
+        );
+    };
+
+
+    const handleScoreClick = (hand_number) => {
+        setScoreHandButtonVisible(false);
+        setScoringHand(hand_number);
+    }
 
     return (
 
         <div className="card-slots-container">
+            <div className="played-cards">
+                {playedCards.map((card, index) => (
+                <div key={index} className="played-card">
+                    <svg width="100" height="150" viewBox="0 0 170 230">
+                    <use xlinkHref={card} />
+                    </svg>
+                </div>
+                ))}
+            </div>
             <div className="hand">
             {/* First hand of 6 slots */}
+            {scoreHandButtonVisible && Object.keys(hands).length > 0 && (
+                <button className="score-button" onClick={() => handleScoreClick(1)}>
+                Score with this Hand
+                </button>
+            )
+            }
             {Array.from({ length: 6 }, (_, index) => (
                 <div key={index} className="card-slot">
-                    {rendercard(hands[index+1])}
+                    {renderCard(hands[index+1], index+1)}
                 </div>
             ))}
             </div>
             <div className="hand">
             {/* Second hand of 6 slots */}
+            {scoreHandButtonVisible && Object.keys(hands).length > 0 && (
+                <button className="score-button" onClick={() => handleScoreClick(2)}>
+                Score with this Hand
+                </button>
+            )
+            }
             {Array.from({ length: 6 }, (_, index) => (
                 <div key={index} className="card-slot">
-                    {rendercard(hands[index+7])}
+                    {renderCard(hands[index+7], index+7)}
                 </div>
             ))}
             </div>
@@ -116,3 +157,5 @@ export function Hands ( {hands} ) {
     );
 
 }
+
+
