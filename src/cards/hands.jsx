@@ -156,27 +156,66 @@ export function Hands ( {hands, setHands} ) {
             console.log(currentScore)
         }
         if (runSum == 31){
-            setCurrentScore(currentScore => currentScore + 2);
+            setCurrentScore(currentScore => currentScore + 1);
         }
-        if (playedCards[playedCards.length - 1] == playedCards[playedCards.length - 2] && playedCards.length > 1){
-            if (playedCards[playedCards.length - 2] == playedCards[playedCards.length - 3]){
+        if (cardRanks[playedCards[playedCards.length - 1]] == cardRanks[playedCards[playedCards.length - 2]] && playedCards.length > 1){
+            if (cardRanks[playedCards[playedCards.length - 2]] == cardRanks[playedCards[playedCards.length - 3]]){
                 setCurrentScore(currentScore => currentScore + 6);
             }
             else{
                 setCurrentScore(currentScore => currentScore + 2);
             }
         }
+        if (playedCards.length >= 3) {
+            console.log('played cards: ', playedCards)
+            let highestRun = 0;
+
+            const playedCardRanks = playedCards.map(card => cardRanks[card]);
+        
+            if (playedCardRanks.length >= 5) {
+                const lastFive = playedCardRanks.slice(-5);
+                const min = Math.min(...lastFive);
+                const max = Math.max(...lastFive);
+                if (max === min + 4 && new Set(lastFive).size === 5) {
+                    highestRun = 5;
+                }
+            }
+        
+            if (highestRun < 4 && playedCardRanks.length >= 4) {
+                const lastFour = playedCardRanks.slice(-4);
+                const min = Math.min(...lastFour);
+                const max = Math.max(...lastFour);
+                if (max === min + 3 && new Set(lastFour).size === 4) {
+                    highestRun = 4;
+                }
+            }
+        
+            if (highestRun < 3 && playedCardRanks.length >= 3) {
+                const lastThree = playedCardRanks.slice(-3);
+                const min = Math.min(...lastThree);
+                const max = Math.max(...lastThree);
+                if (max === min + 2 && new Set(lastThree).size === 3) {
+                    highestRun = 3;
+                }
+            }
+        
+            setCurrentScore(currentScore => currentScore + highestRun);
+        }
+        
+        
     }
 
     const go = (hands) => {
 
         for (let i = 1; i <= 12; i++){
-            const card = hands[i]
-            if (card <= (31 - runSum)){
-                break;
+            const card = cardRanks[hands[i]]
+            console.log(card)
+            if (card <= (31 - runSum) && card != null){
+                return false;
             }
             else if (i == 12){
                 resetPlayedCards();
+                return true;
             }
         }
     }
@@ -187,14 +226,22 @@ export function Hands ( {hands, setHands} ) {
         console.log("hands updated:", hands);
         console.log("currentScore updated:", currentScore);
         console.log("scoringHand updated:", scoringHand);
+
+        const is_go = go(hands);
+        console.log(playedCards)
+
         if (scoringHand == 1 && lastPlayed < 7 && lastPlayed > 0) {
             score(hands, playedCards)
+            if (is_go){
+                setCurrentScore(currentScore => currentScore + 1);
+            }
         }
         if (scoringHand == 2 && lastPlayed > 7) {
             score(hands, playedCards)
+            if (is_go){
+                setCurrentScore(currentScore => currentScore + 1);
+            }
         }
-
-        // go(hands)
 
         // Any other logic that needs to run after state updates
     }, [playedCards, lastPlayed]); // Add any other states to wait on

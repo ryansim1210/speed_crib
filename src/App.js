@@ -20,7 +20,7 @@ function App() {
 
     // Shuffle cards and set them only once when the component mounts
     useEffect(() => {
-        const shuffledCards = shuffleCards(allCards);
+        const shuffledCards = shuffleCards(allCards);  
         setCards(shuffledCards);
     }, []); // Empty dependency array means this runs only once
 
