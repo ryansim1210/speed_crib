@@ -150,7 +150,38 @@ export function Hands ( {hands, setHands} ) {
         setRunSum(0);
     }
 
-    const score = (hands, playedCards) => {
+    function combosFromHere(nums, number) {
+        console.log('hand for fifteens', nums)
+        let combos = 0;
+        
+        if (nums.length == 1) {
+          return nums[0] == number ? 1 : 0;
+        }
+      
+        for (let i = 0; i < nums.length; i++) {
+          const num = nums[i];
+          if (num == number) {
+            combos += 1;
+          } else if (num < number) {
+            combos += combosFromHere(nums.slice(i + 1), number - num);
+          }
+        }
+        
+        return combos;
+      }
+
+    const scoreHand = (hands) => {
+        if (scoringHand == 1){
+            const fifteens = combosFromHere(hands, 15)
+            console.log('fifteens: ', fifteens)
+        }
+    }
+
+    const score = (hands, playedCards) => { // TODO: fix ranks for face cards
+        let handsNums = Object.values(hands).map(card => cardRanks[card]);
+        handsNums = handsNums.slice(0, 6)
+        const filteredHandsNums = handsNums.filter(element => element !== undefined);
+        scoreHand(filteredHandsNums)
         if (runSum == 15){
             setCurrentScore(currentScore => currentScore + 2);
             console.log(currentScore)
