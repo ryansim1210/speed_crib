@@ -144,6 +144,7 @@ export function Hands ( {hands, setHands} ) {
     const [lastPlayed, setLastPlayed] = useState(0);
     const [runSum, setRunSum] = useState(0);
     const [currentScore, setCurrentScore] = useState(0);
+    const [scoringCards, setScoringCards] = useState(null);
 
     const resetPlayedCards = () => {
         setPlayedCards([]);
@@ -172,16 +173,24 @@ export function Hands ( {hands, setHands} ) {
 
     const scoreHand = (hands) => {
         if (scoringHand == 1){
-            const fifteens = combosFromHere(hands, 15)
-            console.log('fifteens: ', fifteens)
+            let handsNums = hands.map(card => cardRanks[card]);
+            handsNums = handsNums.slice(0, 6)
+            const filteredHandsNums = handsNums.filter(element => element !== undefined);
+            const fifteens = combosFromHere(filteredHandsNums, 15)
+            setCurrentScore(currentScore => currentScore + fifteens*2);
+            return (fifteens*2)
+        }
+        if (scoringHand == 2){
+            let handsNums = hands.map(card => cardRanks[card]);
+            handsNums = handsNums.slice(7)
+            const filteredHandsNums = handsNums.filter(element => element !== undefined);
+            const fifteens = combosFromHere(filteredHandsNums, 15)
+            setCurrentScore(currentScore => currentScore + fifteens*2);
+            return (fifteens*2)
         }
     }
 
     const score = (hands, playedCards) => { // TODO: fix ranks for face cards
-        let handsNums = Object.values(hands).map(card => cardRanks[card]);
-        handsNums = handsNums.slice(0, 6)
-        const filteredHandsNums = handsNums.filter(element => element !== undefined);
-        scoreHand(filteredHandsNums)
         if (runSum == 15){
             setCurrentScore(currentScore => currentScore + 2);
             console.log(currentScore)
@@ -274,6 +283,18 @@ export function Hands ( {hands, setHands} ) {
             }
         }
 
+        if (playedCards.length > 0){
+
+            console.log('hands: ', hands)
+            const allValuesUndefined = Object.values(hands).every(value => value === null);
+
+            if (allValuesUndefined) {
+                const pointsFromHand = scoreHand(scoringCards)
+                alert("Scored from hand: " + pointsFromHand + "!");
+
+            }
+        }
+
         // Any other logic that needs to run after state updates
     }, [playedCards, lastPlayed]); // Add any other states to wait on
 
@@ -314,6 +335,12 @@ export function Hands ( {hands, setHands} ) {
     const handleScoreClick = (hand_number) => {
         setScoreHandButtonVisible(false);
         setScoringHand(hand_number);
+        if (hand_number == 1){
+            setScoringCards(Object.values(hands).slice(0,6))
+        }
+        else {
+            setScoringCards(Object.values(hands).slice(7))
+        }
     }
 
     return (
