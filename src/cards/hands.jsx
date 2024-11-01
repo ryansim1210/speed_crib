@@ -136,10 +136,9 @@ export const cardRanks = {
     '#club_king': 10   // King of Clubs
 };
 
-export function Hands ( {hands, setHands} ) {
+export function Hands ( {hands, setHands, setIsNextHand, newHand, setNewHand} ) {
 
     const [scoringHand, setScoringHand] = useState(null)
-    const [scoreHandButtonVisible, setScoreHandButtonVisible] = useState(true)
     const [playedCards, setPlayedCards] = useState([]); // State for storing the index of the played card
     const [lastPlayed, setLastPlayed] = useState(0);
     const [runSum, setRunSum] = useState(0);
@@ -149,6 +148,14 @@ export function Hands ( {hands, setHands} ) {
     const resetPlayedCards = () => {
         setPlayedCards([]);
         setRunSum(0);
+    }
+
+    const resetHands = () => {
+        setScoringCards(null);
+        setPlayedCards([]);
+        setLastPlayed(0);
+        setRunSum(0);
+        setScoringCards(null);
     }
 
     function combosFromHere(nums, number) {
@@ -174,7 +181,6 @@ export function Hands ( {hands, setHands} ) {
     const scoreHand = (hands) => {
         if (scoringHand == 1){
             let handsNums = hands.map(card => cardRanks[card]);
-            handsNums = handsNums.slice(0, 6)
             const filteredHandsNums = handsNums.filter(element => element !== undefined);
             const fifteens = combosFromHere(filteredHandsNums, 15)
             setCurrentScore(currentScore => currentScore + fifteens*2);
@@ -182,7 +188,6 @@ export function Hands ( {hands, setHands} ) {
         }
         if (scoringHand == 2){
             let handsNums = hands.map(card => cardRanks[card]);
-            handsNums = handsNums.slice(7)
             const filteredHandsNums = handsNums.filter(element => element !== undefined);
             const fifteens = combosFromHere(filteredHandsNums, 15)
             setCurrentScore(currentScore => currentScore + fifteens*2);
@@ -291,6 +296,10 @@ export function Hands ( {hands, setHands} ) {
             if (allValuesUndefined) {
                 const pointsFromHand = scoreHand(scoringCards)
                 alert("Scored from hand: " + pointsFromHand + "!");
+                
+                resetHands();
+
+                setIsNextHand(true);
 
             }
         }
@@ -333,13 +342,13 @@ export function Hands ( {hands, setHands} ) {
 
 
     const handleScoreClick = (hand_number) => {
-        setScoreHandButtonVisible(false);
+        setNewHand(false);
         setScoringHand(hand_number);
         if (hand_number == 1){
             setScoringCards(Object.values(hands).slice(0,6))
         }
         else {
-            setScoringCards(Object.values(hands).slice(7))
+            setScoringCards(Object.values(hands).slice(6))
         }
     }
 
@@ -358,7 +367,7 @@ export function Hands ( {hands, setHands} ) {
             </div>
             <div className="hand">
             {/* First hand of 6 slots */}
-            {scoreHandButtonVisible && Object.keys(hands).length > 0 && (
+            {newHand && Object.keys(hands).length > 0 && (
                 <button className="score-button" onClick={() => handleScoreClick(1)}>
                 Score with this Hand
                 </button>
@@ -372,7 +381,7 @@ export function Hands ( {hands, setHands} ) {
             </div>
             <div className="hand">
             {/* Second hand of 6 slots */}
-            {scoreHandButtonVisible && Object.keys(hands).length > 0 && (
+            {newHand && Object.keys(hands).length > 0 && (
                 <button className="score-button" onClick={() => handleScoreClick(2)}>
                 Score with this Hand
                 </button>
