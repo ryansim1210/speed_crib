@@ -308,6 +308,10 @@ export function Hands ( {hands, setHands, setIsNextHand, newHand, setNewHand} ) 
     }, [playedCards, lastPlayed]); // Add any other states to wait on
 
     const handleCardClick = (index) => {
+        if (scoringHand == null){
+            alert('You must select which hand you are scoring with.')
+            return
+        }
         if ((lastPlayed > 0 && lastPlayed < 7) && index < 7) {
             alert('You must alternate between hands when playing cards.');
         }
@@ -333,6 +337,16 @@ export function Hands ( {hands, setHands, setIsNextHand, newHand, setNewHand} ) 
     const renderCard = (card, index) => {
         return (
             <div onClick={() => handleCardClick(index)} style={{ cursor: 'pointer' }}>
+                <svg width="100" height="150" viewBox="0 0 170 230">
+                    <use xlinkHref={card} />
+                </svg>
+            </div>
+        );
+    };
+
+    const renderCardKitty = (card, index) => {
+        return (
+            <div>
                 <svg width="100" height="150" viewBox="0 0 170 230">
                     <use xlinkHref={card} />
                 </svg>
@@ -393,6 +407,17 @@ export function Hands ( {hands, setHands, setIsNextHand, newHand, setNewHand} ) 
                 </div>
             ))}
             </div>
+            <div className="additional-hand">
+                <div className="hand-label">Kitty</div>
+                <div className="card-row">
+                    {Array.from({ length: 4 }, (_, index) => (
+                        <div key={index} className="card-slot-kitty">
+                            {renderCardKitty(hands[index + 1], index + 1)}
+                        </div>
+                    ))}
+                </div>
+            </div>
+
         </div>
 
     );

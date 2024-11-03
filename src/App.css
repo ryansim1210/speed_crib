@@ -137,3 +137,54 @@
 .played-card:hover {
   transform: scale(1.1); /* Optional: scale up on hover for visual feedback */
 }
+
+
+.card-slots-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.hand {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.additional-hand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  display: flex;
+  position: absolute;
+  right: -250px; /* Adjust as needed for the desired right offset */
+  top: -100px;     /* Adjust for the desired vertical offset */
+}
+
+.hand-label {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 8px;
+  text-align: center;
+  color: #dfdfdf; /* Adjust color as needed */
+}
+
+.card-row {
+  display: flex;
+  margin: 0 -20px; /* Spacing between cards */
+}
+
+/* Each card slot */
+.card-slot-kitty {
+  width: 80px;  /* Width of each card slot */
+  height: 120px; /* Height of each card slot */
+  /* border: 2px solid #333; Border for the slot */
+  border-radius: 8px;
+  margin: 0 -10px; /* Space between the slots */
+  background-color: transparent; /* Light grey background for empty slots */
+}
+
+.card-slot-kitty:hover {
+  transform: scale(1.1); /* Optional: scale up on hover for visual feedback */
+}
