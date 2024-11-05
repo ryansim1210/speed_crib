@@ -136,7 +136,7 @@ export const cardRanks = {
     '#club_king': 10   // King of Clubs
 };
 
-export function Hands ( {hands, setHands, setIsNextHand, newHand, setNewHand} ) {
+export function Hands ( {hands, setHands, setIsNextHand, newHand, setNewHand, selectingKitty, setSelectingKitty} ) {
 
     const [scoringHand, setScoringHand] = useState(null)
     const [playedCards, setPlayedCards] = useState([]); // State for storing the index of the played card
@@ -144,6 +144,15 @@ export function Hands ( {hands, setHands, setIsNextHand, newHand, setNewHand} ) 
     const [runSum, setRunSum] = useState(0);
     const [currentScore, setCurrentScore] = useState(0);
     const [scoringCards, setScoringCards] = useState(null);
+    const [showKitty, setShowKitty] = useState(false);
+    const [kittyCards, setKittyCards] = useState([])
+
+
+    useEffect(() => {
+        if (!Object.values(hands).every(value => value === null)) {
+            setShowKitty(true);
+        } 
+    }, [hands])
 
     const resetPlayedCards = () => {
         setPlayedCards([]);
@@ -156,6 +165,7 @@ export function Hands ( {hands, setHands, setIsNextHand, newHand, setNewHand} ) 
         setLastPlayed(0);
         setRunSum(0);
         setScoringCards(null);
+        setKittyCards([]);
     }
 
     function combosFromHere(nums, number) {
@@ -294,8 +304,10 @@ export function Hands ( {hands, setHands, setIsNextHand, newHand, setNewHand} ) 
             const allValuesUndefined = Object.values(hands).every(value => value === null);
 
             if (allValuesUndefined) {
-                const pointsFromHand = scoreHand(scoringCards)
+                const pointsFromHand = scoreHand(scoringCards);
+                const pointsFromKitty = scoreHand(kittyCards);
                 alert("Scored from hand: " + pointsFromHand + "!");
+                alert("Scored from kitty: " + pointsFromKitty + "!");
                 
                 resetHands();
 
@@ -308,29 +320,64 @@ export function Hands ( {hands, setHands, setIsNextHand, newHand, setNewHand} ) 
     }, [playedCards, lastPlayed]); // Add any other states to wait on
 
     const handleCardClick = (index) => {
-        if (scoringHand == null){
-            alert('You must select which hand you are scoring with.')
-            return
-        }
-        if ((lastPlayed > 0 && lastPlayed < 7) && index < 7) {
-            alert('You must alternate between hands when playing cards.');
-        }
-        else if (lastPlayed > 7 && index > 7)  {
-            alert('You must alternate between hands when playing cards.');
+
+        if (selectingKitty){
+            if (index < 7){
+                if (Object.values(hands).slice(0,6).filter(value => value === null).length == 2){
+                    alert('You have already selected 2 cards from this hand for the Kitty.')
+                }
+                else {
+                    if (kittyCards.length == 3){
+                        setSelectingKitty(false);
+                    }
+                    setKittyCards((prev) => [...prev, hands[index]]);
+                    setHands((prevHands) => ({
+                        ...prevHands,
+                        [index]: null, // Set the played card to null
+                        }));
+                }
+            }
+            if (index >= 7){
+                if (Object.values(hands).slice(6).filter(value => value === null).length == 2){
+                    alert('You have already selected 2 cards from this hand for the Kitty.')
+                }
+                else {
+                    if (kittyCards.length == 3){
+                        setSelectingKitty(false);
+                    }
+                    setKittyCards((prev) => [...prev, hands[index]]);
+                    setHands((prevHands) => ({
+                        ...prevHands,
+                        [index]: null, // Set the played card to null
+                        }));
+                }
+            }
         }
         else{
-            setLastPlayed(index)
-            setRunSum(runSum => runSum + cardRanks[hands[index]]);
-            setPlayedCards((prev) => [...prev, hands[index]]); // Store the played card
-            setHands((prevHands) => ({
-            ...prevHands,
-            [index]: null, // Set the played card to null
-            }));
-            console.log(`Card at index ${index} was played`);
-            console.log(scoringHand)
-            console.log(playedCards)
-            console.log(currentScore)
-        }        
+            if (scoringHand == null){
+                alert('You must select which hand you are scoring with.')
+                return
+            }
+            if ((lastPlayed > 0 && lastPlayed < 7) && index < 7) {
+                alert('You must alternate between hands when playing cards.');
+            }
+            else if (lastPlayed > 7 && index >= 7)  {
+                alert('You must alternate between hands when playing cards.');
+            }
+            else{
+                setLastPlayed(index)
+                setRunSum(runSum => runSum + cardRanks[hands[index]]);
+                setPlayedCards((prev) => [...prev, hands[index]]); // Store the played card
+                setHands((prevHands) => ({
+                ...prevHands,
+                [index]: null, // Set the played card to null
+                }));
+                console.log(`Card at index ${index} was played`);
+                console.log(scoringHand)
+                console.log(playedCards)
+                console.log(currentScore)
+            }       
+        } 
     };
     
 
@@ -408,11 +455,13 @@ export function Hands ( {hands, setHands, setIsNextHand, newHand, setNewHand} ) 
             ))}
             </div>
             <div className="additional-hand">
-                <div className="hand-label">Kitty</div>
+                {showKitty && 
+                    (<div className="hand-label">Kitty</div>)
+                }
                 <div className="card-row">
                     {Array.from({ length: 4 }, (_, index) => (
                         <div key={index} className="card-slot-kitty">
-                            {renderCardKitty(hands[index + 1], index + 1)}
+                            {renderCardKitty(kittyCards[index], index)}
                         </div>
                     ))}
                 </div>

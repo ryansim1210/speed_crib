@@ -188,3 +188,11 @@
 .card-slot-kitty:hover {
   transform: scale(1.1); /* Optional: scale up on hover for visual feedback */
 }
+
+.instruction-text {
+  font-size: 0.8em;
+  font-weight: 500;
+  margin-bottom: 20px;
+  color: #ffffff; /* Adjust color as needed */
+  text-align: center;
+}

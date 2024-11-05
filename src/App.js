@@ -22,6 +22,8 @@ function App() {
 
   const [newHand, setNewHand] = useState(false);
 
+  const [selectingKitty, setSelectingKitty] = useState(false);
+
     // Shuffle cards and set them only once when the component mounts
     useEffect(() => {
         const shuffledCards = shuffleCards(allCards);  
@@ -37,6 +39,7 @@ function App() {
         setNumCards(prevNum => prevNum - 12); // Decrease number of cards by 12
         setIsButtonVisible(false);
         setNewHand(true);
+        setSelectingKitty(true);
     };
 
     const handleNextHand = () => {
@@ -48,6 +51,7 @@ function App() {
       setNumCards(prevNum => prevNum - 12); // Decrease number of cards by 12
       setIsNextHand(false);
       setNewHand(true);
+      setSelectingKitty(true);
     }
 
   return (
@@ -60,12 +64,18 @@ function App() {
               Play
           </button>
         )}
+        {selectingKitty && (
+          <div className="instruction-text">
+            Please select cards for the Kitty. You must select 2 cards from each hand.
+          </div>
+        )
+        }
         {isNextHand && ( // Conditionally render the button
           <button className="play-button" onClick={handleNextHand}>
               Deal Next Hand
           </button>
         )}
-        <Hands hands={handsDealt} setHands={setHandsDealt} setIsNextHand={setIsNextHand} newHand={newHand} setNewHand={setNewHand}/>
+        <Hands hands={handsDealt} setHands={setHandsDealt} setIsNextHand={setIsNextHand} newHand={newHand} setNewHand={setNewHand} selectingKitty={selectingKitty} setSelectingKitty={setSelectingKitty}/>
 
         <div className="deck-wrapper">
           <Deck cardsLeft={numCards} />
