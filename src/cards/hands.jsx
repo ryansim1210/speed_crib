@@ -136,6 +136,61 @@ export const cardRanks = {
     '#club_king': 10   // King of Clubs
 };
 
+export const cardOrder = {
+    '#spade_1': 1,    // Ace of Spades
+    '#spade_2': 2,    // 2 of Spades
+    '#spade_3': 3,    // 3 of Spades
+    '#spade_4': 4,    // 4 of Spades
+    '#spade_5': 5,    // 5 of Spades
+    '#spade_6': 6,    // 6 of Spades
+    '#spade_7': 7,    // 7 of Spades
+    '#spade_8': 8,    // 8 of Spades
+    '#spade_9': 9,    // 9 of Spades
+    '#spade_10': 10,  // 10 of Spades
+    '#spade_jack': 11,  // Jack of Spades
+    '#spade_queen': 12, // Queen of Spades
+    '#spade_king': 13,  // King of Spades
+    '#heart_1': 1,     // Ace of Hearts
+    '#heart_2': 2,     // 2 of Hearts
+    '#heart_3': 3,     // 3 of Hearts
+    '#heart_4': 4,     // 4 of Hearts
+    '#heart_5': 5,     // 5 of Hearts
+    '#heart_6': 6,     // 6 of Hearts
+    '#heart_7': 7,     // 7 of Hearts
+    '#heart_8': 8,     // 8 of Hearts
+    '#heart_9': 9,     // 9 of Hearts
+    '#heart_10': 10,   // 10 of Hearts
+    '#heart_jack': 11,   // Jack of Hearts
+    '#heart_queen': 12,  // Queen of Hearts
+    '#heart_king': 13,   // King of Hearts
+    '#diamond_1': 1,   // Ace of Diamonds
+    '#diamond_2': 2,   // 2 of Diamonds
+    '#diamond_3': 3,   // 3 of Diamonds
+    '#diamond_4': 4,   // 4 of Diamonds
+    '#diamond_5': 5,   // 5 of Diamonds
+    '#diamond_6': 6,   // 6 of Diamonds
+    '#diamond_7': 7,   // 7 of Diamonds
+    '#diamond_8': 8,   // 8 of Diamonds
+    '#diamond_9': 9,   // 9 of Diamonds
+    '#diamond_10': 10, // 10 of Diamonds
+    '#diamond_jack': 11, // Jack of Diamonds
+    '#diamond_queen': 12, // Queen of Diamonds
+    '#diamond_king': 13,  // King of Diamonds
+    '#club_1': 1,    // Ace of Clubs
+    '#club_2': 2,    // 2 of Clubs
+    '#club_3': 3,    // 3 of Clubs
+    '#club_4': 4,    // 4 of Clubs
+    '#club_5': 5,    // 5 of Clubs
+    '#club_6': 6,    // 6 of Clubs
+    '#club_7': 7,    // 7 of Clubs
+    '#club_8': 8,    // 8 of Clubs
+    '#club_9': 9,    // 9 of Clubs
+    '#club_10': 10,  // 10 of Clubs
+    '#club_jack': 11,  // Jack of Clubs
+    '#club_queen': 12, // Queen of Clubs
+    '#club_king': 13   // King of Clubs
+}
+
 export function Hands ( {hands, setHands, setIsNextHand, newHand, setNewHand, selectingKitty, setSelectingKitty} ) {
 
     const [scoringHand, setScoringHand] = useState(null)
@@ -166,6 +221,7 @@ export function Hands ( {hands, setHands, setIsNextHand, newHand, setNewHand, se
         setRunSum(0);
         setScoringCards(null);
         setKittyCards([]);
+        setHands({});
     }
 
     function combosFromHere(nums, number) {
@@ -189,20 +245,62 @@ export function Hands ( {hands, setHands, setIsNextHand, newHand, setNewHand, se
       }
 
     const scoreHand = (hands) => {
-        if (scoringHand == 1){
-            let handsNums = hands.map(card => cardRanks[card]);
-            const filteredHandsNums = handsNums.filter(element => element !== undefined);
-            const fifteens = combosFromHere(filteredHandsNums, 15)
-            setCurrentScore(currentScore => currentScore + fifteens*2);
-            return (fifteens*2)
+
+        let handsNums = hands.map(card => cardRanks[card]);
+        const filteredHandsNums = handsNums.filter(element => element !== undefined);
+        const fifteens = combosFromHere(filteredHandsNums, 15)
+        setCurrentScore(currentScore => currentScore + fifteens*2);
+        let handOrder = hands.map(card => cardOrder[card])
+        const filteredHandOrder = handOrder.filter(element => element !== undefined)
+        const pairs = numPairs(filteredHandOrder)
+        setCurrentScore(currentScore => currentScore + pairs*2);
+        return (fifteens*2)
+
+        // if (scoringHand == 2){
+        //     let handsNums = hands.map(card => cardRanks[card]);
+        //     const filteredHandsNums = handsNums.filter(element => element !== undefined);
+        //     const fifteens = combosFromHere(filteredHandsNums, 15)
+        //     setCurrentScore(currentScore => currentScore + fifteens*2);
+        //     let handOrder = hands.map(card => cardOrder[card])
+        //     const filteredHandOrder = handOrder.filter(element => element !== undefined)
+        //     const pairs = numPairs(filteredHandOrder)
+        //     alert('pairs: ', pairs)
+        //     return (fifteens*2)
+        // }
+    }
+
+    const pairsFromHere = (nums) => {
+        if (nums.length == 1){
+            return 0
         }
-        if (scoringHand == 2){
-            let handsNums = hands.map(card => cardRanks[card]);
-            const filteredHandsNums = handsNums.filter(element => element !== undefined);
-            const fifteens = combosFromHere(filteredHandsNums, 15)
-            setCurrentScore(currentScore => currentScore + fifteens*2);
-            return (fifteens*2)
+        else if (nums.length == 2){
+            if (nums[0] == nums[1]){
+                return 1
+            }
+            else {
+                return 0
+            }
         }
+        else{
+
+            let pairs = 0
+
+            for (let i = 1; i < nums.length-1; i++){
+                if (nums[0] == nums[i]){
+                    pairs += 1
+                }
+            }
+            return pairs
+        }
+    }
+
+    const numPairs = (nums) => {
+        alert('nums for pairs: ' + nums)
+        let pairs = 0
+        for (let i = 0; i < nums.length; i++){
+            pairs += pairsFromHere(nums.slice(i))
+        }
+        return pairs
     }
 
     const score = (hands, playedCards) => { // TODO: fix ranks for face cards
@@ -213,8 +311,8 @@ export function Hands ( {hands, setHands, setIsNextHand, newHand, setNewHand, se
         if (runSum == 31){
             setCurrentScore(currentScore => currentScore + 1);
         }
-        if (cardRanks[playedCards[playedCards.length - 1]] == cardRanks[playedCards[playedCards.length - 2]] && playedCards.length > 1){
-            if (cardRanks[playedCards[playedCards.length - 2]] == cardRanks[playedCards[playedCards.length - 3]]){
+        if (cardOrder[playedCards[playedCards.length - 1]] == cardOrder[playedCards[playedCards.length - 2]] && playedCards.length > 1){
+            if (cardOrder[playedCards[playedCards.length - 2]] == cardOrder[playedCards[playedCards.length - 3]]){
                 setCurrentScore(currentScore => currentScore + 6);
             }
             else{
@@ -225,7 +323,7 @@ export function Hands ( {hands, setHands, setIsNextHand, newHand, setNewHand, se
             console.log('played cards: ', playedCards)
             let highestRun = 0;
 
-            const playedCardRanks = playedCards.map(card => cardRanks[card]);
+            const playedCardRanks = playedCards.map(card => cardOrder[card]);
         
             if (playedCardRanks.length >= 5) {
                 const lastFive = playedCardRanks.slice(-5);
@@ -358,6 +456,9 @@ export function Hands ( {hands, setHands, setIsNextHand, newHand, setNewHand, se
                 alert('You must select which hand you are scoring with.')
                 return
             }
+            if (hands[index] == null){
+                return
+            }
             if ((lastPlayed > 0 && lastPlayed < 7) && index < 7) {
                 alert('You must alternate between hands when playing cards.');
             }
@@ -428,30 +529,34 @@ export function Hands ( {hands, setHands, setIsNextHand, newHand, setNewHand, se
             </div>
             <div className="hand">
             {/* First hand of 6 slots */}
-            {newHand && Object.keys(hands).length > 0 && (
+            {newHand && Object.keys(hands).length > 0 && !selectingKitty && (
                 <button className="score-button" onClick={() => handleScoreClick(1)}>
                 Score with this Hand
                 </button>
             )
             }
-            {Array.from({ length: 6 }, (_, index) => (
+            {Object.keys(hands).length > 0 && (
+                Array.from({ length: 6 }, (_, index) => (
                 <div key={index} className="card-slot">
                     {renderCard(hands[index+1], index+1)}
                 </div>
+                )
             ))}
             </div>
             <div className="hand">
             {/* Second hand of 6 slots */}
-            {newHand && Object.keys(hands).length > 0 && (
+            {newHand && Object.keys(hands).length > 0 && !selectingKitty && (
                 <button className="score-button" onClick={() => handleScoreClick(2)}>
                 Score with this Hand
                 </button>
             )
             }
-            {Array.from({ length: 6 }, (_, index) => (
+            {Object.keys(hands).length > 0 && (
+                Array.from({ length: 6 }, (_, index) => (
                 <div key={index} className="card-slot">
                     {renderCard(hands[index+7], index+7)}
                 </div>
+                )
             ))}
             </div>
             <div className="additional-hand">

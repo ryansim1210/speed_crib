@@ -75,6 +75,7 @@ function App() {
               Deal Next Hand
           </button>
         )}
+
         <Hands hands={handsDealt} setHands={setHandsDealt} setIsNextHand={setIsNextHand} newHand={newHand} setNewHand={setNewHand} selectingKitty={selectingKitty} setSelectingKitty={setSelectingKitty}/>
 
         <div className="deck-wrapper">
