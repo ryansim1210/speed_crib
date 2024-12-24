@@ -254,7 +254,7 @@ export function Hands ( {hands, setHands, setIsNextHand, newHand, setNewHand, se
         const filteredHandOrder = handOrder.filter(element => element !== undefined)
         const pairs = numPairs(filteredHandOrder)
         setCurrentScore(currentScore => currentScore + pairs*2);
-        return (fifteens*2)
+        return ((fifteens+pairs)*2)
 
         // if (scoringHand == 2){
         //     let handsNums = hands.map(card => cardRanks[card]);
@@ -295,7 +295,6 @@ export function Hands ( {hands, setHands, setIsNextHand, newHand, setNewHand, se
     }
 
     const numPairs = (nums) => {
-        alert('nums for pairs: ' + nums)
         let pairs = 0
         for (let i = 0; i < nums.length; i++){
             pairs += pairsFromHere(nums.slice(i))
@@ -404,6 +403,7 @@ export function Hands ( {hands, setHands, setIsNextHand, newHand, setNewHand, se
             if (allValuesUndefined) {
                 const pointsFromHand = scoreHand(scoringCards);
                 const pointsFromKitty = scoreHand(kittyCards);
+
                 alert("Scored from hand: " + pointsFromHand + "!");
                 alert("Scored from kitty: " + pointsFromKitty + "!");
                 
@@ -452,7 +452,7 @@ export function Hands ( {hands, setHands, setIsNextHand, newHand, setNewHand, se
             }
         }
         else{
-            if (scoringHand == null){
+            if (scoringHand == null || newHand){
                 alert('You must select which hand you are scoring with.')
                 return
             }
